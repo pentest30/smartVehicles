@@ -1,29 +1,20 @@
 var net = require('net');
  
 // Configuration parameters
-var HOST = 'localhost';
+var HOST = '0.0.0.0';
 var PORT = 1234;
  
 // Create Server instance 
-var server = net.createServer(onClientConnected);  
- 
-server.listen(PORT, HOST, function() {  
-  console.log('server listening on %j', server.address());
-});
- 
-function onClientConnected(sock) {  
-  var remoteAddress = sock.remoteAddress + ':' + sock.remotePort;
-  console.log('new client connected: %s', remoteAddress);
- 
+let server = net.createServer(function(sock) {        //Setup server to recieve data
+    console.log('Server running on port:' + PORT);
   sock.on('data', function(data) {
-    console.log('%s Says: %s', remoteAddress, data);
-    sock.write(data);
-    sock.write(' exit');
-  });
-  sock.on('close',  function () {
-    console.log('connection from %s closed', remoteAddress);
-  });
-  sock.on('error', function (err) {
-    console.log('Connection %s error: %s', remoteAddress, err.message);
-  });
-};
+        json = data.toString();
+        console.log('Recieved data: ' + json);
+  } )
+
+
+  sock.on('close', function(data) {
+        console.log('Connection Closed!');
+    });
+
+}).listen(PORT, HOST);;
